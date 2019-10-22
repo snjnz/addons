@@ -3,7 +3,6 @@ Plot3DModule <- setRefClass(
     contains = "CustomModule",
     fields = list(
         GUI = "ANY",
-        require = "character",
         # The User Interface (UI) should modify these "fields",
         # which can be used by other components of the module
         # (for example, plotting)
@@ -38,6 +37,7 @@ Plot3DModule <- setRefClass(
 
             ## The main code for your module goes here,
             ## inside a top-level container called "mainGrp"
+            mainGrp$set_borderwidth(5)
             
             ## --- variable list
             
@@ -47,6 +47,7 @@ Plot3DModule <- setRefClass(
             ii <- 1
 
             numvars <- names(data)[sapply(data, is_num)]
+            catvars <- names(data)[sapply(data, is_cat)]
 
             lbl <- glabel("x variable :")
             xvarDrop <- gcombobox(
@@ -90,6 +91,19 @@ Plot3DModule <- setRefClass(
             tbl[ii, 2:3, expand = TRUE] <- zvarDrop
             ii <- ii + 1
 
+            lbl <- glabel("Colour by :")
+            colvarDrop <- gcombobox(c("", catvars),
+                selected = 1,
+                handler = function(h, ...) {
+                    if (svalue(h$obj, index = TRUE) == 1) var_group <<- ""
+                    else var_group <<- svalue(h$obj)        
+                    updatePlot()
+                }
+            )
+            tbl[ii, 1, anchor = c(1, 0), expand = TRUE] <- lbl
+            tbl[ii, 2:3, expand = TRUE] <- colvarDrop
+            ii <- ii + 1
+
             ## viewing angle
             lbl <- glabel("Rotate vertical :")
             phiSld <- gslider(-90, 90, by = 1, value = phi,
@@ -129,8 +143,6 @@ Plot3DModule <- setRefClass(
             
             ## if you can do it without any user input, draw a basic plot
             updatePlot()
-
-            cat("Running new module\n")
         },
         ## add new methods to simplify your code
         updatePlot = function(interactive = FALSE) {
@@ -143,17 +155,41 @@ Plot3DModule <- setRefClass(
             y <- if (var_y == "") rep(0, nrow(data)) else data[[var_y]]
             z <- if (var_z == "") rep(0, nrow(data)) else data[[var_z]]
 
+            if (var_group == "") {
+                colvar <- NULL
+                col <- "black"
+                colkey <- NULL
+                pcol <- NULL
+            } else {
+                colvar <- as.integer(data[[var_group]])
+                palettes <- iNZightPlots::cat_palette_names()
+                col <-  iNZightPlots::inzpalette(names(palettes)[1])(length(unique(colvar)))
+                colkey <- list(plot = FALSE)
+                pcol <- col[colvar]
+            }
+
             if (!interactive) {
                 plot3D::scatter3D(x, y, z, 
-                    colvar = NULL, 
+                    colvar = colvar, col = col, colkey = FALSE,
                     theta = theta, phi = phi,
-                    xlab = var_x, ylab = var_y, zlab = var_z
+                    xlab = var_x, ylab = var_y, zlab = var_z,
+                    bty = "b2", pch = 19
                 )
+                if (var_group != "") {
+                    legend("right", 
+                        levels(data[[var_group]]),
+                        col = col,
+                        pch = 19,
+                        bty = "n",
+                        title = var_group
+                    )
+                }
                 return()
             }
 
             ## otherwise, rgl!
             rgl::plot3d(x, y, z,
+                col = pcol,
                 xlab = var_x, ylab = var_y, zlab = var_z,
                 type = "s", size = 1
             )

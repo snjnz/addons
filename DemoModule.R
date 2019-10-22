@@ -15,8 +15,8 @@ DemoModule <- setRefClass(
                 embedded = TRUE
             )
 
-            ## something about installing packages
-            # install_dependencies(list_of_packages)
+            ## you must specify any necessary packages for the module:
+            # install_dependencies(list_of_packages, optional = nonessential_packages)
 
             ## The main code for your module goes here,
             ## inside a top-level container called "mainGrp"
