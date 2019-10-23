@@ -16,8 +16,8 @@ Plot3DModule <- setRefClass(
     ),
     methods = list(
         initialize = function(gui, name) {
-            callSuper(gui, 
-                name = name, 
+            callSuper(gui,
+                name = name,
                 embedded = TRUE
             )
             initFields(
@@ -38,20 +38,20 @@ Plot3DModule <- setRefClass(
             ## The main code for your module goes here,
             ## inside a top-level container called "mainGrp"
             mainGrp$set_borderwidth(5)
-            
+
             ## --- variable list
-            
+
 
             ## --- chosen variable boxes
             tbl <- glayout()
             ii <- 1
 
-            numvars <- names(data)[sapply(data, is_num)]
-            catvars <- names(data)[sapply(data, is_cat)]
+            numvars <- names(data)[sapply(data, iNZightTools::is_num)]
+            catvars <- names(data)[sapply(data, iNZightTools::is_cat)]
 
             lbl <- glabel("x variable :")
             xvarDrop <- gcombobox(
-                c("Select X Variable", numvars), 
+                c("Select X Variable", numvars),
                 selected = 1,
                 handler = function(h, ...) {
                     if (svalue(h$obj, index = TRUE) == 1) var_x <<- ""
@@ -65,7 +65,7 @@ Plot3DModule <- setRefClass(
 
             lbl <- glabel("y variable :")
             yvarDrop <- gcombobox(
-                c("Select Y Variable", numvars), 
+                c("Select Y Variable", numvars),
                 selected = 1,
                 handler = function(h, ...) {
                     if (svalue(h$obj, index = TRUE) == 1) var_y <<- ""
@@ -79,7 +79,7 @@ Plot3DModule <- setRefClass(
 
             lbl <- glabel("z variable :")
             zvarDrop <- gcombobox(
-                c("Select Z Variable", numvars), 
+                c("Select Z Variable", numvars),
                 selected = 1,
                 handler = function(h, ...) {
                     if (svalue(h$obj, index = TRUE) == 1) var_z <<- ""
@@ -96,7 +96,7 @@ Plot3DModule <- setRefClass(
                 selected = 1,
                 handler = function(h, ...) {
                     if (svalue(h$obj, index = TRUE) == 1) var_group <<- ""
-                    else var_group <<- svalue(h$obj)        
+                    else var_group <<- svalue(h$obj)
                     updatePlot()
                 }
             )
@@ -127,20 +127,22 @@ Plot3DModule <- setRefClass(
             tbl[ii, 2:3, expand = TRUE] <- thetaSld
             ii <- ii + 1
 
-            add(mainGrp, tbl)
 
             ## Render in 3D (using rgl)
             if (requireNamespace('plot3Drgl', quietly = TRUE)) {
-                btn <- gbutton("Open interactive plot", 
-                    container = mainGrp,
+                btn <- gbutton("Open interactive plot",
+                    # container = mainGrp,
                     handler = function(h, ...) {
                         updatePlot(interactive = TRUE)
                     }
                 )
+                tbl[ii, 1:2, expand=T] <- btn
+                ii <- ii + 1
             }
+            add(mainGrp, tbl)
 
             ## The UI provides a way for users to change values of "fields"
-            
+
             ## if you can do it without any user input, draw a basic plot
             updatePlot()
         },
@@ -169,14 +171,15 @@ Plot3DModule <- setRefClass(
             }
 
             if (!interactive) {
-                plot3D::scatter3D(x, y, z, 
+                dev.hold()
+                plot3D::scatter3D(x, y, z,
                     colvar = colvar, col = col, colkey = FALSE,
                     theta = theta, phi = phi,
                     xlab = var_x, ylab = var_y, zlab = var_z,
                     bty = "b2", pch = 19
                 )
                 if (var_group != "") {
-                    legend("right", 
+                    legend("right",
                         levels(data[[var_group]]),
                         col = col,
                         pch = 19,
@@ -184,6 +187,7 @@ Plot3DModule <- setRefClass(
                         title = var_group
                     )
                 }
+                dev.flush()
                 return()
             }
 
