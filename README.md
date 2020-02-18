@@ -10,11 +10,3 @@ To use, simply download the raw R file and place it in your modules folder.
 
 To make your own, simply grab the `DemoModule.R` file and modify!
 
-## Important note
-
-You'll need the (currently developmental) addon versions of iNZight and iNZightModules:
-
-```r
-devtools::install_github('iNZightVIT/iNZightModules@feature/addon-modules')
-devtools::install_github('iNZightVIT/iNZight@feature/addon-modules')
-```
