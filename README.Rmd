@@ -37,4 +37,4 @@ apply(tbl, 1,
 knitr::kable(tbl, row.names = FALSE)
 ```
 
-To install, download the file and place it `Documents/iNZightVIT/modules`.
+To install, download the file and place it `Documents/iNZightVIT/modules`. It will then show up in iNZight's Advanced menu.
