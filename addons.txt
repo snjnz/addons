@@ -4,6 +4,11 @@ Description: A module used to demonstrate iNZight's add-on
         functionality
 Author: Tom Elliott
 
+Name: Multivariate
+Version: 0.0.1
+Description: A module used for multivariate graphics and analysis.
+Author: Daniel Barnett
+
 Name: 3D Plotting
 Version: 0.0.1
 Description: Explore three variables in a three-dimensional plot.
