@@ -36,3 +36,5 @@ apply(tbl, 1,
 
 knitr::kable(tbl, row.names = FALSE)
 ```
+
+To install, download the file and place it `Documents/iNZightVIT/modules`.
