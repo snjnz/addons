@@ -1,0 +1,10 @@
+Name: Demo Module
+Version: 0.0.1
+Description: A module used to demonstrate iNZight's add-on functionality
+Author: Tom Elliott
+
+Name: 3D Plotting
+Version: 0.0.1
+Description: Explore three variables in a three-dimensional plot.
+Author: Tom Elliott
+
