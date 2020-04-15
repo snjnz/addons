@@ -18,5 +18,5 @@ knitr::opts_chunk$set(
 
 ```{r, echo = FALSE}
 source('create_index.R')
-knitr::kable(create_index())
+knitr::kable(create_index(), row.names = FALSE)
 ```

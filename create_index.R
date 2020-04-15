@@ -24,26 +24,26 @@ getmodule <- function(f) {
     t <- paste(collapse = "\n", t)
     if (!grepl("^[a-zA-Z]+[a-zA-Z0-9]*\\s*<-\\s*setRefClass", t)) return(NULL)
 
-    ## load module into an environment to avoid clashes
+    # ## load module into an environment to avoid clashes
     e <- new.env()
-    eval(parse(text = t), e)
+    # eval(parse(text = t), e)
 
-    ## fetch the module's name
-    objs <- ls(e)
-    obj <- objs[which(sapply(objs, function(o) {
-        ob <- e[[o]]
-        pclass <- try(ob@generator$def@contains$refClass@by, silent = TRUE)
-        if (inherits(pclass, "try-error")) return(FALSE)
-        pclass == "CustomModule"
-    }))]
-    if (length(obj) != 1) {
-        warning("Couldn't find module class.")
-        return(NULL)
-    }
-    e$name <- obj
-    e$display_name <- e[[obj]]@className[1]
+    # ## fetch the module's name
+    # objs <- ls(e)
+    # obj <- objs[which(sapply(objs, function(o) {
+    #     ob <- e[[o]]
+    #     pclass <- try(ob@generator$def@contains$refClass@by, silent = TRUE)
+    #     if (inherits(pclass, "try-error")) return(FALSE)
+    #     pclass == "CustomModule"
+    # }))]
+    # if (length(obj) != 1) {
+    #     warning("Couldn't find module class.")
+    #     return(NULL)
+    # }
+    # e$name <- obj
+    # e$display_name <- e[[obj]]@className[1]
     e$meta <- meta
-    e$module <- e[[obj]]
+    # e$module <- e[[obj]]
     e$path <- f
     e
 }
@@ -63,13 +63,16 @@ create_index <- function() {
     mods <- getModules(".")
     tbl <- lapply(mods,
         function(mod) {
-            list(
-                Name = mod$display_name,
-                Version = mod$meta$version %||% "",
-                Description = mod$meta$desc %||% "",
-                Author = mod$meta$author %||% ""
-            ) %>% as.data.frame(stringsAsFactors = FALSE)
+            as.data.frame(
+                list(
+                    Name = mod$meta$name %||% basename(mod$path),
+                    Version = mod$meta$version %||% "",
+                    Description = mod$meta$desc %||% "",
+                    Author = mod$meta$author %||% ""
+                ),
+                stringsAsFactors = FALSE
+            )
         }
-    ) %>% bind_rows()
-    tbl
+    )
+    do.call(rbind, tbl)
 }
