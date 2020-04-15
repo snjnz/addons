@@ -13,8 +13,7 @@ knitr::opts_chunk$set(
 
 # iNZight Addons
 
-<!-- badges: start -->
-<!-- badges: end -->
+Below is a list of available addons for iNZight.
 
 ```{r, echo = FALSE}
 source('create_index.R')
