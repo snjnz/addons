@@ -18,22 +18,7 @@ Below is a list of available addons for iNZight.
 ```{r, echo = FALSE}
 source('create_index.R')
 tbl <- create_index()
-
-# write to file:
-f <- "addons.txt"
-unlink(f)
-z <- apply(tbl, 1,
-  function(x) {
-    cat(
-      "Name: ", x["Name"], "\n",
-      "Version: ", x["Version"], "\n",
-      "Description: ", x["Description"], "\n",
-      "Author: ", x["Author"], "\n\n",
-      file = f, sep = "", append = TRUE
-    )
-  }
-)
-
+write.dcf(tbl, "addons.txt")
 knitr::kable(tbl, row.names = FALSE)
 ```
 
