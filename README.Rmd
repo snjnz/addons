@@ -22,7 +22,7 @@ tbl <- create_index()
 # write to file:
 f <- "addons.txt"
 unlink(f)
-apply(tbl, 1,
+z <- apply(tbl, 1,
   function(x) {
     cat(
       "Name: ", x["Name"], "\n",
