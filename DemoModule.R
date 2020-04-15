@@ -1,3 +1,7 @@
+#' @name Demo Module
+#' @version 0.0.1
+#' @author Tom Elliott
+#' @desc A module used to demonstrate iNZight's add-on functionality
 DemoModule <- setRefClass(
     "Demo Module",
     contains = "CustomModule",
@@ -10,8 +14,8 @@ DemoModule <- setRefClass(
     ),
     methods = list(
         initialize = function(gui, name) {
-            callSuper(gui, 
-                name = name, 
+            callSuper(gui,
+                name = name,
                 embedded = TRUE
             )
 
@@ -32,7 +36,7 @@ DemoModule <- setRefClass(
                     ## This handler gets called when the user selects
                     ## a different option.
                     ##
-                    ## Assigning values to "fields" requires the double 
+                    ## Assigning values to "fields" requires the double
                     ## assignment operator, like so
                     colour <<- svalue(colBox)
 

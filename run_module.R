@@ -8,4 +8,3 @@ try(ui$close(), TRUE)
 ui <- iNZGUI$new()
 wd <- getwd()
 ui$initializeGui(iris, addonDir = wd)
-
