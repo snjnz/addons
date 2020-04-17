@@ -50,8 +50,8 @@ Plot3DModule <- setRefClass(
             tbl <- glayout()
             ii <- 1
 
-            numvars <- names(data)[sapply(data, is_num)]
-            catvars <- names(data)[sapply(data, is_cat)]
+            numvars <- names(data)[sapply(data, iNZightTools::is_num)]
+            catvars <- names(data)[sapply(data, iNZightTools::is_cat)]
 
             lbl <- glabel("x variable :")
             xvarDrop <- gcombobox(
@@ -131,7 +131,6 @@ Plot3DModule <- setRefClass(
             tbl[ii, 2:3, expand = TRUE] <- thetaSld
             ii <- ii + 1
 
-            add(mainGrp, tbl)
 
             ## Render in 3D (using rgl)
             if (requireNamespace('plot3Drgl', quietly = TRUE)) {
@@ -141,7 +140,10 @@ Plot3DModule <- setRefClass(
                         updatePlot(interactive = TRUE)
                     }
                 )
+                tbl[ii, 1:2, expand=T] <- btn
+                ii <- ii + 1
             }
+            add(mainGrp, tbl)
 
             ## The UI provides a way for users to change values of "fields"
 
@@ -173,6 +175,7 @@ Plot3DModule <- setRefClass(
             }
 
             if (!interactive) {
+                dev.hold()
                 plot3D::scatter3D(x, y, z,
                     colvar = colvar, col = col, colkey = FALSE,
                     theta = theta, phi = phi,
@@ -188,6 +191,7 @@ Plot3DModule <- setRefClass(
                         title = var_group
                     )
                 }
+                dev.flush()
                 return()
             }
 
