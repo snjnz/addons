@@ -1,3 +1,7 @@
+#' @name 3D Plotting
+#' @version 0.0.1
+#' @author Tom Elliott
+#' @desc Explore three variables in a three-dimensional plot.
 Plot3DModule <- setRefClass(
     "3D Scatter Plot",
     contains = "CustomModule",
@@ -131,7 +135,7 @@ Plot3DModule <- setRefClass(
             ## Render in 3D (using rgl)
             if (requireNamespace('plot3Drgl', quietly = TRUE)) {
                 btn <- gbutton("Open interactive plot",
-                    # container = mainGrp,
+                    container = mainGrp,
                     handler = function(h, ...) {
                         updatePlot(interactive = TRUE)
                     }

@@ -1,0 +1,47 @@
+---
+output: github_document
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+# iNZight Addons
+
+Below is a list of available addons for iNZight.
+
+```{r, echo = FALSE}
+source('create_index.R')
+tbl <- create_index()
+write.dcf(tbl, "addons.txt")
+knitr::kable(tbl, row.names = FALSE)
+```
+
+To install, download the file and install it from within iNZight:
+
+- Open the __Advanced__ menu
+- Choose __Manage modules__
+- Click the __Browse__ button to locate the addon file
+- Click __Install__
+
+You can also __remove modules__ from __Manage modules__.
+
+
+## Manual installation
+
+To install addons manually, simply download the raw R file
+and place it in your modules folder:
+
+- Windows: `My Documents\iNZightVIT\modules`
+- macOS: `Documents/iNZightVIT/modules`
+- Linux: probably `~/Documents/iNZightVIT/modules`
+
+
+## Making your own
+
+To make your own, simply grab the `DemoModule.R` file and modify!
