@@ -1,5 +1,5 @@
 Name: Demo Module
-Version: 0.0.1
+Version: 0
 Description: A module used to demonstrate iNZight's add-on
         functionality
 Author: Tom Elliott
