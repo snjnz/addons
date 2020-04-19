@@ -20,6 +20,7 @@ source('create_index.R')
 tbl <- create_index()
 MIN_VERSION <- ifelse(Sys.getenv("TRAVIS_BRANCH") == "master", 1, 0)
 tbl <- tbl[tbl$Version >= numeric_version(MIN_VERSION), ]
+tbl$Version <- as.character(tbl$Version)
 if (nrow(tbl)) {
   write.dcf(tbl, "addons.txt")
   knitr::kable(tbl, row.names = FALSE)
