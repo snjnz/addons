@@ -5,6 +5,9 @@
 
 Below is a list of available addons for iNZight.
 
+    #> % BRANCH: refs/heads/dev
+    #> % MINVERSION: 0
+
 | Name         | Version | Description                                                 | Author         |
 | :----------- | :------ | :---------------------------------------------------------- | :------------- |
 | Demo Module  | 0       | A module used to demonstrate iNZight’s add-on functionality | Tom Elliott    |
