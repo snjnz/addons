@@ -18,8 +18,15 @@ Below is a list of available addons for iNZight.
 ```{r, echo = FALSE}
 source('create_index.R')
 tbl <- create_index()
-write.dcf(tbl, "addons.txt")
-knitr::kable(tbl, row.names = FALSE)
+MIN_VERSION <- ifelse(Sys.getenv("TRAVIS_BRANCH") == "master", 1, 0)
+tbl <- tbl[tbl$Version >= numeric_version(MIN_VERSION), ]
+if (nrow(tbl)) {
+  write.dcf(tbl, "addons.txt")
+  knitr::kable(tbl, row.names = FALSE)
+} else {
+  cat("", file = "addons.txt")
+  cat("No addons are currently available.\n")
+}
 ```
 
 To install, download the file and install it from within iNZight:
