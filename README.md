@@ -12,7 +12,7 @@ Below is a list of available addons for iNZight.
 | 3D Plotting  | 0.0.1   | Explore three variables in a three-dimensional plot.        | Tom Elliott    |
 
 <!--
-BRANCH: refs/heads/dev
+BRANCH: refs/heads/master
 MINVERSION: 0
 -->
 
