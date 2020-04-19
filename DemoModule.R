@@ -1,5 +1,4 @@
 #' @name Demo Module
-#' @version 0.0.1
 #' @author Tom Elliott
 #' @desc A module used to demonstrate iNZight's add-on functionality
 DemoModule <- setRefClass(

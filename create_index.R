@@ -66,7 +66,7 @@ create_index <- function() {
             as.data.frame(
                 list(
                     Name = mod$meta$name %||% basename(mod$path),
-                    Version = mod$meta$version %||% "",
+                    Version = numeric_version(mod$meta$version %||% 0),
                     Description = mod$meta$desc %||% "",
                     Author = mod$meta$author %||% ""
                 ),
