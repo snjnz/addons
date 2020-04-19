@@ -21,6 +21,8 @@ tbl <- create_index()
 MIN_VERSION <- ifelse(Sys.getenv("GITHUB_REF") == "master", 1, 0)
 tbl <- tbl[tbl$Version >= numeric_version(MIN_VERSION), ]
 tbl$Version <- as.character(tbl$Version)
+cat("% BRANCH:", Sys.getenv("GITHUB_REF"), "\n")
+cat("% MINVERSION:", MIN_VERSION, "\n")
 if (nrow(tbl)) {
   write.dcf(tbl, "addons.txt")
   knitr::kable(tbl, row.names = FALSE)
