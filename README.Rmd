@@ -23,7 +23,7 @@ tbl <- tbl[tbl$Version >= numeric_version(MIN_VERSION), ]
 tbl$Version <- as.character(tbl$Version)
 if (nrow(tbl)) {
   write.dcf(tbl, "addons.txt")
-  knitr::kable(tbl, row.names = FALSE)
+  knitr::kable(tbl[, -6], row.names = FALSE)
 } else {
   cat("", file = "addons.txt")
   cat("No addons are currently available.\n")
