@@ -5,15 +5,11 @@
 
 Below is a list of available addons for iNZight.
 
-| Name         | Version | Description                                                 | Author         |
-| :----------- | :------ | :---------------------------------------------------------- | :------------- |
-| Demo Module  | 0       | A module used to demonstrate iNZight’s add-on functionality | Tom Elliott    |
-| Multivariate | 0.0.1   | A module used for multivariate graphics and analysis.       | Daniel Barnett |
-| 3D Plotting  | 0.0.1   | Explore three variables in a three-dimensional plot.        | Tom Elliott    |
+    #> No addons are currently available.
 
 <!--
-BRANCH: refs/heads/dev
-MINVERSION: 0
+BRANCH: refs/heads/master
+MINVERSION: 1
 -->
 
 To install, download the file and install it from within iNZight:
