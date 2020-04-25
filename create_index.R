@@ -68,7 +68,8 @@ create_index <- function() {
                     Name = mod$meta$name %||% basename(mod$path),
                     Version = numeric_version(mod$meta$version %||% 0),
                     Description = mod$meta$desc %||% "",
-                    Author = mod$meta$author %||% ""
+                    Author = mod$meta$author %||% "",
+                    filename = gsub("^\\.\\/", "", mod$path)
                 ),
                 stringsAsFactors = FALSE
             )
