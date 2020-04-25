@@ -1,5 +1,4 @@
 # creates an index of the modules
-
 `%||%` <- function(a, b)
     if (is.null(a)) b else a
 
