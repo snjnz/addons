@@ -5,7 +5,7 @@
 ## This comes from iNZightModules :
 getModules <- function(dir) {
     mods <- list.files(dir, pattern = "*.R", full.names = TRUE)
-    mods <- mods[!grepl("DemoModule", mods)]
+    # mods <- mods[!grepl("DemoModule", mods)]
     mod_list <- lapply(mods, getmodule)
     mod_list <- mod_list[!sapply(mod_list, is.null)]
     names(mod_list) <- sapply(mod_list, function(x) x$name)
