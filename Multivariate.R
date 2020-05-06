@@ -1,5 +1,5 @@
 #' @name Multivariate
-#' @version 0.0.1
+#' @version 1.0.0
 #' @author Daniel Barnett
 #' @desc A module used for multivariate graphics and analysis.
 MultivariateModule <- setRefClass(
