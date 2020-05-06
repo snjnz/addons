@@ -6,7 +6,7 @@ Author: Tom Elliott
 filename: DemoModule.R
 
 Name: Multivariate
-Version: 0.0.1
+Version: 1.0.0
 Description: A module used for multivariate graphics and analysis.
 Author: Daniel Barnett
 filename: Multivariate.R
