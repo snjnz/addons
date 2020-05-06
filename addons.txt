@@ -1,0 +1,18 @@
+Name: Demo Module
+Version: 0
+Description: A module used to demonstrate iNZight's add-on
+        functionality
+Author: Tom Elliott
+filename: DemoModule.R
+
+Name: Multivariate
+Version: 1.0.0
+Description: A module used for multivariate graphics and analysis.
+Author: Daniel Barnett
+filename: Multivariate.R
+
+Name: 3D Plotting
+Version: 0.0.1
+Description: Explore three variables in a three-dimensional plot.
+Author: Tom Elliott
+filename: plot3DModule.R
