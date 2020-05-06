@@ -1,0 +1,5 @@
+Name: Multivariate
+Version: 1.0.0
+Description: A module used for multivariate graphics and analysis.
+Author: Daniel Barnett
+filename: Multivariate.R
