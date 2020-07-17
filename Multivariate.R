@@ -1,5 +1,5 @@
 #' @name Multivariate
-#' @version 1.0.0
+#' @version 1.0.1
 #' @author Daniel Barnett
 #' @desc A module used for multivariate graphics and analysis.
 MultivariateModule <- setRefClass(
@@ -49,6 +49,10 @@ MultivariateModule <- setRefClass(
 
       ## you must specify any necessary packages for the module:
       install_dependencies(c("vegan", "iNZightMultivariate", "GGally", "corrplot"))
+      if (!requireNamespace("iNZightMultivariate", quietly = TRUE)) {
+        gmessage("Unable to load the necessary packages.", type = "error")
+        close()
+      }
 
       method.labels <- c(
         "Pairs Plot"                          = "pairs",
