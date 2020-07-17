@@ -49,10 +49,13 @@ MultivariateModule <- setRefClass(
 
       ## you must specify any necessary packages for the module:
       install_dependencies(c("vegan", "iNZightMultivariate", "GGally", "corrplot"))
+
+      # dirty hack for now - will add a method to parent in a future update
       if (!requireNamespace("iNZightMultivariate", quietly = TRUE)) {
         gmessage("Unable to load the necessary packages.", type = "error")
         close()
       }
+      eval(parse(text = "library(iNZightMultivariate)"), envir = e)
 
       method.labels <- c(
         "Pairs Plot"                          = "pairs",
