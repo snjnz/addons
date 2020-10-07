@@ -1,5 +1,6 @@
 #' @name Demographic Modelling Module
 #' @author Tom Elliott
+#' @version 0.0.1
 #' @desc Bayesian small domain estimation
 DemestModule <- setRefClass(
     "Demographic Modelling Module",
@@ -10,7 +11,8 @@ DemestModule <- setRefClass(
         arr_data = "ANY",
         tab_data = "ANY",
         response_var = "ANY",
-        response_type = "ANY"
+        response_type = "ANY",
+        exposure_var = "ANY", exposure = "ANY"
     ),
     methods = list(
         initialize = function(gui, name) {
@@ -62,6 +64,15 @@ DemestModule <- setRefClass(
             tbl_response[ii, 2:3, expand = TRUE] <- response_var
             ii <- ii + 1
 
+            exposure_var <<- gcombobox(c("None", varnames),
+                selected = 1L,
+                handler = function(h, ...) updatePlot()
+            )
+            lbl <- glabel("Exposure variable: ")
+            tbl_response[ii, 1, anchor = c(1, 0), expand = TRUE] <- lbl
+            tbl_response[ii, 2:3, expand = TRUE] <- exposure_var
+            ii <- ii + 1
+
             response_type <<- gcombobox(c("Counts", "Values"),
                 selected = 0,
                 handler = function(h, ...) {
@@ -82,7 +93,6 @@ DemestModule <- setRefClass(
             tbl_response[ii, 1, anchor = c(1, 0), expand = TRUE] <- lbl
             tbl_response[ii, 2:3, expand = TRUE] <- response_type
             ii <- ii + 1
-
 
             ### -------------------------------------- Variable info
             g_vars <- gexpandgroup("Variable information",
@@ -122,6 +132,8 @@ DemestModule <- setRefClass(
             vars <- names(dtypes)
             ovar <- vars[-tvar]
             tvar <- vars[tvar]
+            evar <- svalue(exposure_var, index = TRUE) - 1L
+            evar <- if (evar > 0) vars[evar] else NULL
 
             tmp <- tab_data
             if (length(ovar) > 3) {
