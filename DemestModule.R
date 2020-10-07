@@ -1,6 +1,6 @@
-#' @name Demo Module
+#' @name Demographic Modelling Module
 #' @author Tom Elliott
-#' @desc A module used to demonstrate iNZight's add-on functionality
+#' @desc Bayesian small domain estimation
 DemestModule <- setRefClass(
     "Demographic Modelling Module",
     contains = "CustomModule",
