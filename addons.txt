@@ -1,7 +1,6 @@
-Name: Demo Module
+Name: Demographic Modelling Module
 Version: 0
-Description: A module used to demonstrate iNZight's add-on
-        functionality
+Description: Bayesian small domain estimation
 Author: Tom Elliott
 filename: DemestModule.R
 
