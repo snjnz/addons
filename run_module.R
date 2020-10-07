@@ -7,4 +7,12 @@ load_all('../iNZight')
 try(ui$close(), TRUE)
 ui <- iNZGUI$new()
 wd <- getwd()
-ui$initializeGui(iris, addonDir = wd)
+# ui$initializeGui(iris, addonDir = wd)
+
+# demest module testing
+remotes::install_github('StatisticsNZ/demdata')
+nzincome <- demdata::nz.income
+
+ui$initializeGui(nzincome, addonDir = wd)
+
+# dataset > aggregate > [reorder and select]
