@@ -7,7 +7,7 @@ Below is a list of available addons for iNZight.
 
 | Name                         | Version | Description                                                 | Author         |
 | :--------------------------- | :------ | :---------------------------------------------------------- | :------------- |
-| Demographic Modelling Module | 0       | Bayesian small domain estimation                            | Tom Elliott    |
+| Demographic Modelling Module | 0.0.1   | Bayesian small domain estimation                            | Tom Elliott    |
 | Demo Module                  | 0       | A module used to demonstrate iNZight’s add-on functionality | Tom Elliott    |
 | Multivariate                 | 1.0.1   | A module used for multivariate graphics and analysis.       | Daniel Barnett |
 | 3D Plotting                  | 0.0.1   | Explore three variables in a three-dimensional plot.        | Tom Elliott    |

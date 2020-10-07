@@ -1,5 +1,5 @@
 Name: Demographic Modelling Module
-Version: 0
+Version: 0.0.1
 Description: Bayesian small domain estimation
 Author: Tom Elliott
 filename: DemestModule.R
