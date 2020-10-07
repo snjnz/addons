@@ -3,6 +3,13 @@ Version: 0
 Description: A module used to demonstrate iNZight's add-on
         functionality
 Author: Tom Elliott
+filename: DemestModule.R
+
+Name: Demo Module
+Version: 0
+Description: A module used to demonstrate iNZight's add-on
+        functionality
+Author: Tom Elliott
 filename: DemoModule.R
 
 Name: Multivariate
