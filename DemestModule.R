@@ -113,6 +113,7 @@ DemestModule <- setRefClass(
             # It should generate a plot purely from the values
             # of variables stored in "fields".
             # The UI then alters the values of the fields and calls this function.
+
             dtypes <- dembase::dimtypes(tab_data)
             tvars <- c("age", "time")
             tvar <- which(tvars %in% dtypes)
@@ -122,11 +123,54 @@ DemestModule <- setRefClass(
             ovar <- vars[-tvar]
             tvar <- vars[tvar]
 
-            # fmla <- sprintf("~ %s | %s", tvar, ovar[1])
+            tmp <- tab_data
+            if (length(ovar) > 3) {
+                # collapse down dimensions; requires counts
+            }
+
+            df <- as.data.frame(tmp,
+                direction = "long",
+                midpoints = tvar)
+
+            p <- ggplot2::ggplot(df,
+                ggplot2::aes_(
+                    as.name(tvar),
+                    ~value,
+                    colour = if (length(ovar)) as.name(ovar[1]) else NULL
+                )
+            ) +
+                ggplot2::geom_path() +
+                ggplot2::ylab(svalue(response_var)) +
+                ggplot2::theme_minimal()
+
+            if (length(ovar) == 2) {
+                p <- p +
+                    ggplot2::facet_wrap(
+                        ggplot2::vars(!!rlang::sym(ovar[2]))
+                    )
+            } else {
+                p <- p +
+                    ggplot2::facet_grid(
+                        ggplot2::vars(!!rlang::sym(ovar[2])),
+                        ggplot2::vars(!!rlang::sym(ovar[3]))
+                    )
+            }
+
+            print(p)
+
+            # gvar <- ovar[1] # grouping variable
+            # if (length(ovar) > 2L) # subsetting variable(s)
+            #     svar <- paste(" |", paste(ovar[-(1L:2L)], collapse = " + "))
+            # else
+            #     svar <- ""
+
+            # fmla <- sprintf("~ %s%s", tvar, svar)
             # print(fmla)
             # dembase::dplot(eval(parse(text = fmla)),
-            #     data = tab_data
+            #     data = tab_data,
+            #     groups = eval(rlang::ensym(gvar))
             # )
+
         },
         close = function() {
             cat("Closing module\n")
