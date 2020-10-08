@@ -8,11 +8,12 @@ DemestModule <- setRefClass(
     fields = list(
         GUI = "ANY",
         raw_data = "ANY",
-        arr_data = "ANY",
-        tab_data = "ANY",
         response_var = "ANY",
         response_type = "ANY",
-        exposure_var = "ANY", exposure = "ANY"
+        exposure_var = "ANY",
+        tab_data = "ANY",
+        exposure = "ANY",
+        used_vars = "ANY"
     ),
     methods = list(
         initialize = function(gui, name) {
@@ -53,9 +54,7 @@ DemestModule <- setRefClass(
             response_var <<- gcombobox(varnames,
                 selected = 0,
                 handler = function(h, ...) {
-                    r <- svalue(response_var)
-                    vn <- varnames[varnames != r]
-                    arr_data <<- tapply(raw_data[[r]], raw_data[vn], c)
+                    set_vars()
                     visible(response_type) <<- TRUE
                 }
             )
@@ -66,7 +65,7 @@ DemestModule <- setRefClass(
 
             exposure_var <<- gcombobox(c("None", varnames),
                 selected = 1L,
-                handler = function(h, ...) updatePlot()
+                handler = function(h, ...) set_vars()
             )
             lbl <- glabel("Exposure variable: ")
             tbl_response[ii, 1, anchor = c(1, 0), expand = TRUE] <- lbl
@@ -76,16 +75,9 @@ DemestModule <- setRefClass(
             response_type <<- gcombobox(c("Counts", "Values"),
                 selected = 0,
                 handler = function(h, ...) {
-                    # this will move to a separate method shortly
-                    f <- switch(svalue(response_type),
-                        Counts = dembase::Counts,
-                        Values = dembase::Values
-                    )
-                    # optional specification of dimscales ?
-                    tab_data <<- f(arr_data)
+                    set_vars()
                     visible(g_vars) <- TRUE
                     visible(g_response) <- FALSE
-                    updatePlot()
                 }
             )
             visible(response_type) <<- FALSE
@@ -106,14 +98,54 @@ DemestModule <- setRefClass(
                 expand = TRUE)
             ii <- 1
 
-            vars_ok <- gbutton("All good")
-            tbl_vars[ii, 3, expand = TRUE] <- vars_ok
+            used_vars <<- gtable(varnames, multiple = TRUE)
+            addHandlerSelectionChanged(used_vars,
+                handler = function(h, ...) updatePlot()
+            )
+            tbl_vars[ii, 3, expand = TRUE] <- used_vars
+            size(used_vars) <<- c(-1, 200)
             ii <- ii + 1
 
 
+        },
+        set_vars = function() {
+            if (response_var$get_index() == 0) return()
+            if (response_type$get_index() == 0) return()
 
+            var_y <- svalue(response_var)
+            var_n <- if (exposure_var$get_index() > 1L) svalue(exposure_var) else NULL
+            r_type <- svalue(response_type)
 
+            vars_all <- names(raw_data)
+            vars <- vars_all[vars_all %notin% c(var_y, var_n)]
 
+            chosen_vars <- svalue(used_vars)
+            blockHandlers(used_vars)
+            if (length(chosen_vars)) {
+                chosen_vars <- chosen_vars[chosen_vars %in% vars]
+                used_vars$set_items(vars)
+                used_vars$set_value(chosen_vars)
+            } else {
+                used_vars$set_items(vars)
+            }
+            unblockHandlers(used_vars)
+
+            d_types <- NULL
+            d_scales <- NULL
+
+            tab_data <<- make_dem_array(raw_data, var_y, vars, r_type, d_types, d_scales)
+            exposure <<- make_dem_array(raw_data, var_n, vars, "Counts", d_types, d_scales)
+
+            updatePlot()
+        },
+        make_dem_array = function(data, y, x, type, dimtypes, dimscales) {
+            if (is.null(y)) return(NULL)
+            arr <- tapply(raw_data[[y]], raw_data[x], c)
+            f <- switch(type,
+                Counts = dembase::Counts,
+                Values = dembase::Values
+            )
+            f(arr, dimtypes, dimscales)
         },
         ## add new methods to simplify your code
         updatePlot = function() {
@@ -132,39 +164,56 @@ DemestModule <- setRefClass(
             vars <- names(dtypes)
             ovar <- vars[-tvar]
             tvar <- vars[tvar]
-            evar <- svalue(exposure_var, index = TRUE) - 1L
-            evar <- if (evar > 0) vars[evar] else NULL
+            vars <- c(tvar, ovar)
 
             tmp <- tab_data
+            etmp <- exposure
+            if (length(svalue(used_vars)) && !is.null(exposure)) {
+                if (length(svalue(used_vars)) < length(vars)) {
+                    cvar <- vars[vars %notin% svalue(used_vars)]
+                    vars <- vars[vars %in% svalue(used_vars)]
+                    tmp <- dembase::collapseDimension(
+                        tmp,
+                        dimension = cvar,
+                        weights = exposure
+                    )
+                    etmp <- dembase::collapseDimension(exposure, dimension = cvar)
+                }
+            }
+            if (!is.null(exposure)) {
+                tmp <- tmp / etmp
+            }
             if (length(ovar) > 3) {
                 # collapse down dimensions; requires counts
+                stop("Cannot handle more than 4 dims yet")
             }
 
             df <- as.data.frame(tmp,
                 direction = "long",
                 midpoints = tvar)
 
+            print(vars)
             p <- ggplot2::ggplot(df,
                 ggplot2::aes_(
-                    as.name(tvar),
+                    as.name(vars[1]),
                     ~value,
-                    colour = if (length(ovar)) as.name(ovar[1]) else NULL
+                    colour = if (length(vars) > 1) as.name(vars[2]) else NULL
                 )
             ) +
                 ggplot2::geom_path() +
                 ggplot2::ylab(svalue(response_var)) +
                 ggplot2::theme_minimal()
 
-            if (length(ovar) == 2) {
+            if (length(vars) == 3) {
                 p <- p +
                     ggplot2::facet_wrap(
-                        ggplot2::vars(!!rlang::sym(ovar[2]))
+                        ggplot2::vars(!!rlang::sym(vars[3]))
                     )
-            } else {
+            } else if (length(vars) == 4) {
                 p <- p +
                     ggplot2::facet_grid(
-                        ggplot2::vars(!!rlang::sym(ovar[2])),
-                        ggplot2::vars(!!rlang::sym(ovar[3]))
+                        ggplot2::vars(!!rlang::sym(vars[3])),
+                        ggplot2::vars(!!rlang::sym(vars[4]))
                     )
             }
 
