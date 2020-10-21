@@ -16,3 +16,7 @@ nzincome <- demdata::nz.income
 ui$initializeGui(nzincome, addonDir = wd)
 
 # dataset > aggregate > [reorder and select]
+
+
+
+ui$initializeGui(gapminder, addonDir = wd)

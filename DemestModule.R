@@ -10,10 +10,11 @@ DemestModule <- setRefClass(
         raw_data = "ANY",
         response_var = "ANY",
         response_type = "ANY",
-        exposure_var = "ANY",
+        exposure_label = "ANY", exposure_var = "ANY",
         tab_data = "ANY",
         exposure = "ANY",
         used_vars = "ANY",
+        vars_ok_btn = "ANY",
         response_lhfun = "ANY",
         response_lhfmla = "ANY"
     ),
@@ -53,11 +54,17 @@ DemestModule <- setRefClass(
 
             varnames <- colnames(raw_data)
             vartypes <- sapply(raw_data, iNZightTools::vartype)
-            response_var <<- gcombobox(varnames,
+            response_var <<- gcombobox(varnames[vartypes == "num"],
                 selected = 0L,
                 handler = function(h, ...) {
                     set_vars()
-                    visible(response_type) <<- TRUE
+                    vn <- svalue(h$obj)
+                    rt_match <- sapply(response_type$get_items(),
+                        function(x) grepl(tolower(x), tolower(vn)))
+                    if (any(rt_match)) {
+                        response_type$set_index(which(rt_match))
+                    }
+                    enabled(response_type) <<- TRUE
                 }
             )
             lbl <- glabel("Response variable: ")
@@ -65,27 +72,56 @@ DemestModule <- setRefClass(
             tbl_response[ii, 2:3, expand = TRUE] <- response_var
             ii <- ii + 1L
 
-            exposure_var <<- gcombobox(c("None", varnames),
-                selected = 1L,
-                handler = function(h, ...) set_vars()
-            )
-            lbl <- glabel("Exposure variable: ")
-            tbl_response[ii, 1L, anchor = c(1, 0), expand = TRUE] <- lbl
-            tbl_response[ii, 2:3, expand = TRUE] <- exposure_var
-            ii <- ii + 1L
-
-            response_type <<- gcombobox(c("Counts", "Values"),
+            response_type <<- gcombobox(
+                c("Births", "Deaths", "Migration", "Income", "School", "Counts", "Values"),
                 selected = 0L,
                 handler = function(h, ...) {
-                    set_vars()
-                    visible(g_vars) <- TRUE
-                    visible(g_response) <- FALSE
+                    if (svalue(h$obj) %in% c("Births", "Deaths", "Counts")) {
+                        response_lhfun$set_items(c("Poisson", "Binomial"))
+                    } else {
+                        response_lhfun$set_items(c("Normal"))
+                        response_lhfun$set_index(1L)
+                    }
+                    enabled(response_lhfun) <<- TRUE
                 }
             )
-            visible(response_type) <<- FALSE
+            enabled(response_type) <<- FALSE
             lbl <- glabel("Response type: ")
             tbl_response[ii, 1L, anchor = c(1, 0), expand = TRUE] <- lbl
             tbl_response[ii, 2:3, expand = TRUE] <- response_type
+            ii <- ii + 1L
+
+
+            response_lhfun <<- gcombobox(c("Normal", "Poisson", "Binomial"),
+                selected = 0L,
+                handler = function(h, ...) {
+                    if (h$obj$get_index()) {
+                        svalue(exposure_label) <<-
+                            ifelse(svalue(h$obj) == "Binomial",
+                                "Sample size: ",
+                                "Exposure variable: "
+                            )
+                        enabled(exposure_var) <<- TRUE
+                    } else {
+                        svalue(exposure_label) <<- ""
+                        enabled(exposure_var) <<- FALSE
+                    }
+                }
+            )
+            enabled(response_lhfun) <<- FALSE
+            lbl <- glabel("Response framework: ")
+            tbl_response[ii, 1L, anchor = c(1, 0), expand = TRUE] <- lbl
+            tbl_response[ii, 2:3, expand = TRUE] <- response_lhfun
+            ii <- ii + 1L
+
+            exposure_var <<- gcombobox(c("None", varnames[vartypes == "num"]),
+                selected = 1L,
+                handler = function(h, ...) set_vars()
+            )
+            enabled(exposure_var) <<- FALSE
+            exposure_label <<- glabel("")
+            tbl_response[ii, 1L, anchor = c(1, 0), expand = TRUE] <- exposure_label
+            tbl_response[ii, 2:3, expand = TRUE] <- exposure_var
             ii <- ii + 1L
 
             ### -------------------------------------- Variable info
@@ -131,11 +167,11 @@ DemestModule <- setRefClass(
 
             # Values: normal
             # Counts: Binomial, Poisson
-            response_lhfun <<- gcombobox("Select response variable")
+            # response_lhfun <<- gcombobox("Select response variable")
             response_lhfmla <<- gedit("")
 
             tbl_likelihood[ii, 1L, expand = TRUE, anchor = c(1, 0)] <- glabel("Response type :")
-            tbl_likelihood[ii, 2:3, expand = TRUE] <- response_lhfun
+            # tbl_likelihood[ii, 2:3, expand = TRUE] <- response_lhfun
             ii <- ii + 1L
 
             tbl_likelihood[ii, 1L, expand = TRUE, anchor = c(1, 0)] <- glabel("Formula :")
