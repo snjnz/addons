@@ -5,6 +5,8 @@
 
 Below is a list of available addons for iNZight.
 
+    #> Warning in readLines(f): incomplete final line found on './run_module.R'
+
 | Name                         | Version | Description                                                 | Author         |
 | :--------------------------- | :------ | :---------------------------------------------------------- | :------------- |
 | Demographic Modelling Module | 0.0.1   | Bayesian small domain estimation                            | Tom Elliott    |
